@@ -27,11 +27,14 @@ class PredictionResult():
     def prediction(self) -> str:
         return self.__prediction
 
-    def __str__(self):
+    def as_dict(self):
         output = {
             "outputs": {
                 "Labels": self.labels,
                 "Prediction": [self.prediction],
             }
         }
-        return json.dumps(output, default=lambda o: o.__dict__)
+        return output
+
+    def __str__(self):
+        return json.dumps(self.as_dict())

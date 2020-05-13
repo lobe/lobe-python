@@ -2,7 +2,7 @@
 import requests
 from PIL import Image
 from image_utils import image_to_base64
-from results import PredictionResult
+from .results import PredictionResult
 
 def send_image_predict_request(image: Image.Image, predict_url: str, key: str) -> PredictionResult:
     payload = {

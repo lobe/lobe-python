@@ -12,22 +12,21 @@ from PIL import Image
 import numpy as np
 from typing import Tuple
 
-from results import PredictionResult
-import image_utils
+from .results import PredictionResult
+from . import image_utils
+
+def load(model_path: str) -> ImageModel:
+    model_path_real = os.path.realpath(model_path)
+    if not os.path.isdir(model_path_real):
+        raise ValueError(f"Model folder doesn't exist {model_path}")
+
+    signature_path = os.path.join(model_path_real, "signature.json")
+    if not os.path.isfile(signature_path):
+        raise ValueError(f"signature.json file not found")
+
+    return ImageClassificationModel(model_path_real)
 
 class ImageModel(ABC):
-    @classmethod
-    def from_path(cls, model_path: str) -> ImageModel:
-        model_path_real = os.path.realpath(model_path)
-        if not os.path.isdir(model_path_real):
-            raise ValueError(f"Model folder doesn't exist {model_path}")
-
-        signature_path = os.path.join(model_path_real, "signature.json")
-        if not os.path.isfile(signature_path):
-            raise ValueError(f"signature.json file not found")
-
-        return ImageClassificationModel(model_path_real)
-
     def __init__(self, model_path: str):
         self.__model_path = model_path
 

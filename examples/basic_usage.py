@@ -1,11 +1,4 @@
-# lobe-python
-
-## Install
-Clone this repo, then go to the repo root directory and call:
-```python setup.py install```
-
-## Usage
-```
+#!/usr/bin/env python
 from lobe import ImageModel
 
 model = ImageModel.load('path/to/exported/model')
@@ -22,10 +15,8 @@ img = Image.open('path/to/file.jpg')
 result = model.predict(img)
 
 # Print top prediction
-print(result.prediction)
+print("Top prediction:", result.prediction)
 
 # Print all classes
 for label, prop in result.labels:
     print(f"{label}: {prop*100}%")
-
-```
