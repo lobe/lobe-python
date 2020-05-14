@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 """
-Load a Lobe TF saved model
+Load a Lobe saved model
 """
 from __future__ import annotations
 import os
 import json
 from abc import ABC, abstractmethod
+from PIL import Image
+from typing import Tuple
 import tensorflow as tf
 from tensorflow.contrib import predictor
-from PIL import Image
+
+# Suppress numpy's excessive FutureWarnings on import
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning) 
 import numpy as np
-from typing import Tuple
 
 from .results import PredictionResult
 from . import image_utils
