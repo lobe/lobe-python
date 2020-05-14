@@ -1,8 +1,10 @@
 # lobe-python
 
 ## Install
-Clone this repo, then go to the repo root directory and call:
-```python setup.py install```
+```
+pip3 install setuptools
+pip3 install git+https://github.com/lobe/lobe-python
+```
 
 ## Usage
 ```
@@ -10,13 +12,13 @@ from lobe import ImageModel
 
 model = ImageModel.load('path/to/exported/model')
 
-# Predict from an image file
+# OPTION 1: Predict from an image file
 result = model.predict_from_file('path/to/file.jpg')
 
-# Predict from an image url
+# OPTION 2: Predict from an image url
 result = model.predict_from_url('http://path/to/file.jpg')
 
-# Predict from Pillow image
+# OPTION 3: Predict from Pillow image
 from PIL import Image
 img = Image.open('path/to/file.jpg')
 result = model.predict(img)
