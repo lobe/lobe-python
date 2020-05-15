@@ -7,6 +7,7 @@ setup(
     install_requires=[
         "numpy",
         "pillow",
+        "requests",
         "tensorflow>=1.13.1"
     ]
 )

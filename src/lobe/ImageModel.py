@@ -8,13 +8,6 @@ import json
 from abc import ABC, abstractmethod
 from PIL import Image
 from typing import Tuple
-import tensorflow as tf
-from tensorflow.contrib import predictor
-
-# Suppress numpy's excessive FutureWarnings on import
-import warnings
-warnings.simplefilter(action='ignore', category=FutureWarning) 
-import numpy as np
 
 from .results import PredictionResult
 from . import image_utils
@@ -28,9 +21,9 @@ def load(model_path: str) -> ImageModel:
     if not os.path.isfile(signature_path):
         raise ValueError(f"signature.json file not found")
 
-    return ImageClassificationModel(model_path_real)
+    return ImageModel(model_path)
 
-class ImageModel(ABC):
+class ImageModel:
     def __init__(self, model_path: str):
         self.__model_path = model_path
 
@@ -44,6 +37,16 @@ class ImageModel(ABC):
 
         assert len(input_tensor_shape) == 4
         self.__input_image_size = (input_tensor_shape[1], input_tensor_shape[2])
+
+        model_format = self.__signature.get("format")
+        if model_format == "tf":
+            from .backends import tf_backend as backend
+        elif model_format == "tflite":
+            from .backends import tflite_backend as backend
+        else:
+            raise ValueError("Model is an unsupported format")
+        
+        self.__backend = backend.ImageClassificationModel(model_path)
 
     @property
     def model_path(self) -> str:
@@ -72,7 +75,7 @@ class ImageModel(ABC):
     def input_image_size(self) -> Tuple[int, int]:
         return self.__input_image_size
 
-    def preprocess_image(self, image: Image.Image) -> np.ndarray:
+    def __preprocess_image(self, image: Image.Image) -> Image.Image:
         image_processed = image_utils.update_orientation(image)
 
         # resize and crop image to the model's required size
@@ -80,11 +83,7 @@ class ImageModel(ABC):
         image_processed = image_utils.resize_uniform_to_fill(image_processed, self.__input_image_size)
         image_processed = image_utils.crop_center(image_processed, self.__input_image_size)
 
-        # Convert all values to range [0,1]
-        np_image = np.asarray(image_processed) / 255.
-
-        # Finally, add an extra axis onto the numpy array
-        return np_image[np.newaxis, ...]
+        return image_processed
 
     def __str__(self):
         model_info = {
@@ -101,38 +100,6 @@ class ImageModel(ABC):
     def predict_from_file(self, path: str):
         return self.predict(image_utils.get_image_from_file(path))
 
-    @abstractmethod
     def predict(self, image: Image.Image):
-        pass
-
-class ImageClassificationModel(ImageModel):
-    __input_key_image = 'Image'
-    __input_key_batch_size = "batch_size"
-    __output_key_labels = 'Labels_idx_000'
-    __output_key_confidences = 'Labels_idx_001'
-    __output_key_prediction = 'Prediction'
-
-    def __init__(self, model_path):
-        super().__init__(model_path)
-
-        # placeholder for the tensorflow predictor
-        self.predict_fn = None
-
-    def __load(self):
-        self.predict_fn = predictor.from_saved_model(self.model_path)
-
-    def predict(self, image: Image.Image):
-        if self.predict_fn is None:
-            self.__load()
-
-        np_image = self.preprocess_image(image)
-
-        predictions = self.predict_fn({
-                self.__input_key_image: np_image,
-                self.__input_key_batch_size: 1 })
-
-        labels = [label.decode('utf-8') for label in predictions[self.__output_key_labels][0].tolist()]
-        confidences = predictions[self.__output_key_confidences][0].tolist()
-        top_prediction = predictions[self.__output_key_prediction][0].decode('utf-8')
-        
-        return PredictionResult(labels=list(zip(labels, confidences)), prediction=top_prediction)
+        image_processed = self.__preprocess_image(image)
+        return self.__backend.predict(image_processed)
