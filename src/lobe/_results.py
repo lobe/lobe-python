@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from __future__ import annotations
 import json
 
@@ -36,5 +35,5 @@ class PredictionResult():
         }
         return output
 
-    def __str__(self):
+    def __str__(self) -> str:
         return json.dumps(self.as_dict())

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import sys
 from io import BytesIO
 from PIL import Image
@@ -69,3 +68,12 @@ def get_image_from_url(url: str) -> Image.Image:
 
 def get_image_from_file(path: str) -> Image.Image:
     return Image.open(path)
+
+def preprocess_image(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
+    image_processed = update_orientation(image)
+
+    # resize and crop image to the model's required size
+    image_processed = ensure_rgb_format(image)
+    image_processed = resize_uniform_to_fill(image_processed, size)
+    image_processed = crop_center(image_processed, size)
+    return image_processed

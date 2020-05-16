@@ -1,6 +1,6 @@
 import numpy as np
 from PIL import Image
-from .. import results
+from .._results import PredictionResult
 
 class ImageClassificationModel():
     __input_key_image = 'Image'
@@ -16,5 +16,5 @@ class ImageClassificationModel():
     def __load(self):
         return None
 
-    def predict(self, image: Image.Image):
+    def predict(self, image: Image.Image) -> PredictionResult:
         return None

@@ -1,7 +1,7 @@
 import numpy as np
 
 from PIL import Image
-from .. import results
+from .._results import PredictionResult
 
 try:
     import tensorflow as tf
@@ -23,7 +23,7 @@ class ImageClassificationModel():
     def __load(self):
         self.__tf_predict_fn = predictor.from_saved_model(self.__model_path)
 
-    def predict(self, image: Image.Image):
+    def predict(self, image: Image.Image) -> PredictionResult:
         if self.__tf_predict_fn is None:
             self.__load()
 
