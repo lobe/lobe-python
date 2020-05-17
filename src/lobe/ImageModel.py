@@ -7,7 +7,7 @@ import json
 from PIL import Image
 from typing import Tuple
 
-from .results import PredictionResult
+from ._results import PredictionResult
 from ._model import Model
 from . import Signature
 from . import image_utils

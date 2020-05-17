@@ -60,3 +60,9 @@ class Signature:
     @property
     def input_image_size(self) -> Tuple[int, int]:
         return self.__input_image_size
+
+    def as_dict(self):
+        return self.__signature
+
+    def __str__(self):
+        return json.dumps(self.as_dict())
