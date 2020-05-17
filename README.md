@@ -2,7 +2,20 @@
 
 ## Install
 ```
-pip3 install setuptools
+# Install Python3
+sudo apt update
+sudo apt install -y python3-dev python3-pip
+
+# Install Pillow dependencies
+sudo apt update
+sudo apt install -y \
+    libatlas-base-dev \
+    libopenjp2-7 \
+    libtiff5 \
+    libjpeg62-turbo
+
+# Install lobe-python
+pip3 install setuptools git
 pip3 install git+https://github.com/lobe/lobe-python
 ```
 
