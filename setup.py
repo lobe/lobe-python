@@ -8,6 +8,6 @@ setup(
         "numpy",
         "pillow",
         "requests",
-        "tensorflow>=1.13.1"
+        "tensorflow>=1.13.1,<2"
     ]
 )
