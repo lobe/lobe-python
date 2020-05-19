@@ -22,7 +22,7 @@ def load_from_signature(signature: Signature) -> ImageModel:
     else:
         raise ValueError("Model is an unsupported format")
     
-    backend_predict = backend.ImageClassificationModel(signature.model_path)
+    backend_predict = backend.ImageClassificationModel(signature)
     return ImageModel(signature, backend_predict)
 
 def load(model_path: str) -> ImageModel:

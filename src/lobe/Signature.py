@@ -47,6 +47,10 @@ class Signature:
         return self.__signature.get("format")
 
     @property
+    def filename(self) -> str:
+        return self.__signature.get("filename")
+
+    @property
     def input_tensor_shape(self) -> str:
         return self.__input_image_size
 
