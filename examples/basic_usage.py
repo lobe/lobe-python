@@ -19,4 +19,4 @@ print("Top prediction:", result.prediction)
 
 # Print all classes
 for label, prop in result.labels:
-    print(f"{label}: {prop*100}%")
+    print(f"{label}: {prop*100:.6f}%")

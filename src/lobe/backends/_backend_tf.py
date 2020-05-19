@@ -16,8 +16,8 @@ class ImageClassificationModel():
     __output_key_confidences = 'Labels_idx_001'
     __output_key_prediction = 'Prediction'
 
-    def __init__(self, model_path):
-        self.__model_path = model_path
+    def __init__(self, signature):
+        self.__model_path = signature.model_path
         self.__tf_predict_fn = None
 
     def __load(self):
@@ -40,5 +40,6 @@ class ImageClassificationModel():
         labels = [label.decode('utf-8') for label in predictions[self.__output_key_labels][0].tolist()]
         confidences = predictions[self.__output_key_confidences][0].tolist()
         top_prediction = predictions[self.__output_key_prediction][0].decode('utf-8')
-        
-        return results.PredictionResult(labels=list(zip(labels, confidences)), prediction=top_prediction)
+        # return PredictionResult(labels=list(zip(labels, confidences)), prediction=top_prediction)
+
+        return PredictionResult(labels=list(zip(labels, confidences)), prediction=top_prediction)
