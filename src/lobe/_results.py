@@ -13,6 +13,15 @@ class PredictionResult():
     def from_json(cls, json_str: str) -> PredictionResult:
         results = json.loads(json_str)
         return PredictionResult.from_dict(results)
+    
+    @classmethod
+    def sort_predictions(cls, confidences, labels):
+        top_predictions = confidences.argsort()[-5:][::-1]
+        labels = labels
+        sorted_labels = []
+        for i in top_predictions:
+            sorted_labels.append(labels[i])
+        return sorted_labels, confidences[top_predictions]
 
     def __init__(self, labels, prediction: str):
         self.__labels = labels
