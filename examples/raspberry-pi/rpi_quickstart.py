@@ -10,7 +10,7 @@ camera = PiCamera()
 
 # Load Lobe TF model
 # --> Change model path
-model = ImageModel.load('/path/to/model')
+model = ImageModel.load('/home/pi/model')
 
 
 
