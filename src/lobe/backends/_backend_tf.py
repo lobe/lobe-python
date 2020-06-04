@@ -38,7 +38,7 @@ class ImageClassificationModel():
                 self.__input_key_batch_size: 1 })
 
         labels = [label.decode('utf-8') for label in predictions[self.__output_key_labels][0].tolist()]
-        confidences = predictions[self.__output_key_confidences][0].tolist()
+        confidences = predictions[self.__output_key_confidences][0]
         top_prediction = predictions[self.__output_key_prediction][0].decode('utf-8')
 
-        return PredictionResult(labels=list(zip(labels, confidences)), prediction=top_prediction)
+        return PredictionResult(labels=labels, confidences=confidences, prediction=top_prediction)

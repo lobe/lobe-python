@@ -4,6 +4,7 @@ from .._results import PredictionResult
 
 try:
     import tflite_runtime.interpreter as tflite
+
 except ImportError:
     # Needs better error text
     raise ImportError(
@@ -12,13 +13,15 @@ except ImportError:
 
 
 class ImageClassificationModel:
+    __MAX_UINT8 = 255
+
     def __init__(self, signature):
         self.__model_path = "{}/{}".format(
             signature.model_path, signature.filename
         )
         self.__tflite_predict_fn = None
         self.__labels = signature.classes
-        self.__max_unint8 = 255
+
         raise ImportError("TFLite not yet supported")
 
     def __load(self):
@@ -36,13 +39,14 @@ class ImageClassificationModel:
         np_image = np.expand_dims(image, axis=0)
 
         # Converts to floating point and standardize range from 0 to 1.
-        np_image = np.float32(np_image) / self.__max_unint8
+        np_image = np.float32(np_image) / self.__MAX_UINT8
 
         input_details = self.__tflite_predict_fn.get_input_details()
         output_details = self.__tflite_predict_fn.get_output_details()
 
         self.__tflite_predict_fn.set_tensor(
-            input_details[0]["index"], np_image
+            input_details[0]["index"],
+            np_image
         )
 
         self.__tflite_predict_fn.invoke()
@@ -57,11 +61,8 @@ class ImageClassificationModel:
         confidences = np.squeeze(confidences_output)
         top_prediction = top_prediction_output.item().decode("utf-8")
 
-        sorted_labels, top_confidences = PredictionResult.sort_predictions(
-            confidences, self.__labels
-        )
-
         return PredictionResult(
-            labels=list(zip(sorted_labels, top_confidences)),
+            labels=self.__labels,
+            confidences=confidences,
             prediction=top_prediction,
         )

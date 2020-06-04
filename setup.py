@@ -8,9 +8,8 @@ setup(
         "numpy",
         "pillow",
         "requests",
-        "tensorflow>=1.15.0;platform_machine=='x86_64'",
+        "tensorflow>1.14.0,<2;platform_machine!='armv7l'",
         "tensorflow<1.14.0 ; platform_machine=='armv7l'"
-        
     ],
     dependency_links=["https://www.piwheels.org/simple/tensorflow"]
 )

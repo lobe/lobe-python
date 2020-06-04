@@ -1,6 +1,7 @@
 from __future__ import annotations
 import json
 
+
 class PredictionResult():
     @classmethod
     def from_dict(cls, results) -> PredictionResult:
@@ -13,9 +14,9 @@ class PredictionResult():
     def from_json(cls, json_str: str) -> PredictionResult:
         results = json.loads(json_str)
         return PredictionResult.from_dict(results)
-    
-    @classmethod
-    def sort_predictions(cls, confidences, labels):
+
+    @staticmethod
+    def __sort_predictions(labels, confidences):
         top_predictions = confidences.argsort()[-5:][::-1]
         labels = labels
         sorted_labels = []
@@ -23,8 +24,9 @@ class PredictionResult():
             sorted_labels.append(labels[i])
         return sorted_labels, confidences[top_predictions]
 
-    def __init__(self, labels, prediction: str):
-        self.__labels = labels
+    def __init__(self, labels, confidences, prediction: str):
+        sorted_labels, sorted_confidences = self.__sort_predictions(labels, confidences)
+        self.__labels = list(zip(sorted_labels, sorted_confidences))
         self.__prediction = prediction
 
     @property
