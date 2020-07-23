@@ -22,7 +22,6 @@ class ImageClassificationModel:
         self.__tflite_predict_fn = None
         self.__labels = signature.classes
 
-        raise ImportError("TFLite not yet supported")
 
     def __load(self):
         self.__tflite_predict_fn = tflite.Interpreter(
