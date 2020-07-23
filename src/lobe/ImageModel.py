@@ -17,7 +17,7 @@ def load_from_signature(signature: Signature) -> ImageModel:
     model_format = signature.format
     if model_format == "tf":
         from .backends import _backend_tf as backend
-    elif model_format == "tflite":
+    elif model_format == "tf_lite":
         from .backends import _backend_tflite as backend
     else:
         raise ValueError("Model is an unsupported format")
