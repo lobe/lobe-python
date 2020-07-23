@@ -16,7 +16,7 @@ class ImageClassificationModel:
     __MAX_UINT8 = 255
 
     def __init__(self, signature):
-        self.__model_path = "{}/{}".format(
+        self.__model_path = "{}/{}.tflite".format(
             signature.model_path, signature.filename
         )
         self.__tflite_predict_fn = None
@@ -54,7 +54,7 @@ class ImageClassificationModel:
         )
 
         confidences_output = self.__tflite_predict_fn.get_tensor(
-            output_details[1]["index"]
+            output_details[2]["index"]
         )
 
         confidences = np.squeeze(confidences_output)
