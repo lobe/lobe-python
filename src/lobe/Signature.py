@@ -1,24 +1,39 @@
 from __future__ import annotations
 import os
 import json
+import pathlib
 from typing import Tuple
 
 def load(model_path: str) -> Signature:
+    """
+    Loads the Signature for the given PATH or PATH_AND_FILENAME provided:
+    - Use PATH When: Using Lobe-Python in its default config, the Signature and TensorFlow (and TFLite) models are expected to be 
+        in one folder by themselves. Additional models may exist, but they too are expected to be in their own folders.
+    - Use PATH_AND_FILENAME When: Using Lobe-Python with multiple TensorFlow (and TFLite) models in the same folder, with
+        the Signature and Model files named uniquely. This allows you to store multiple TensorFlow/TFLite models and signatures in the same folder.
+    """
     model_path_real = os.path.realpath(os.path.expanduser(model_path))
+
+    #This could be a full_path to the signature file
     if not os.path.isdir(model_path_real):
-        raise ValueError(f"Model directory does not exist: {model_path}")
+        filename, extension = os.path.splitext(model_path_real)
+        if (extension.lower() != ".json" ): #Signature file must end in "json"
+            raise ValueError(f"Model file provided is not valid: {model_path_real}")
+        signature_path = model_path_real  #We have the signature file, so load the model
+    else:
+        #This is a directory with a single Signature File to load
+        signature_path = os.path.join(model_path_real, "signature.json")
+        if not os.path.isfile(signature_path):
+            raise ValueError(f"signature.json file not found at path: {model_path}")
 
-    signature_path = os.path.join(model_path_real, "signature.json")
-    if not os.path.isfile(signature_path):
-        raise ValueError(f"signature.json file not found at path: {model_path}")
-
-    return Signature(model_path_real)
+    return Signature(signature_path) 
 
 class Signature:
-    def __init__(self, model_path: str):
-        self.__model_path = model_path
+    def __init__(self, model_full_path: str):
+        model_path = pathlib.Path(model_full_path)
+        self.__model_path = model_path.parent
 
-        with open(os.path.join(model_path, "signature.json"), "r") as f:
+        with open(model_full_path, "r") as f:
             self.__signature = json.load(f)
             
         inputs = self.__signature.get("inputs")
