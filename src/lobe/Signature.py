@@ -15,25 +15,27 @@ def load(model_path: str) -> Signature:
     model_path_real = os.path.realpath(os.path.expanduser(model_path))
 
     #This could be a full_path to the signature file
-    if not os.path.isdir(model_path_real):
+    if os.path.isfile(model_path_real):
         filename, extension = os.path.splitext(model_path_real)
         if (extension.lower() != ".json" ): #Signature file must end in "json"
             raise ValueError(f"Model file provided is not valid: {model_path_real}")
         signature_path = model_path_real  #We have the signature file, so load the model
-    else:
+    elif os.path.isdir(model_path_real):
         #This is a directory with a single Signature File to load
         signature_path = os.path.join(model_path_real, "signature.json")
         if not os.path.isfile(signature_path):
             raise ValueError(f"signature.json file not found at path: {model_path}")
+    else:
+        raise ValueError(f"Invalid Signature file or Model directory: {model_path}")
 
     return Signature(signature_path) 
 
 class Signature:
-    def __init__(self, model_full_path: str):
-        model_path = pathlib.Path(model_full_path)
-        self.__model_path = model_path.parent
+    def __init__(self, signature_path: str):
+        model_path = pathlib.Path(signature_path)
+        self.__signature_path = model_path.parent
 
-        with open(model_full_path, "r") as f:
+        with open(signature_path, "r") as f:
             self.__signature = json.load(f)
             
         inputs = self.__signature.get("inputs")
@@ -43,7 +45,7 @@ class Signature:
 
     @property
     def model_path(self) -> str:
-        return self.__model_path
+        return self.__signature_path
 
     @property
     def id(self) -> str:
