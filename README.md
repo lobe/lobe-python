@@ -1,4 +1,5 @@
 # lobe-python
+Code to run exported Lobe models in Python.
 
 ## Install
 ```
