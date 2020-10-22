@@ -9,7 +9,10 @@ setup(
         "pillow",
         "requests",
         "tensorflow>=1.15.2,<2;platform_machine!='armv7l'",
-        "tensorflow<1.14.0 ; platform_machine=='armv7l'"
+        "tflite_runtime ; platform_machine=='armv7l'"
     ],
-    dependency_links=["https://www.piwheels.org/simple/tensorflow"]
+    dependency_links=[
+        "https://www.piwheels.org/simple/tensorflow",
+        "https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl"
+    ]
 )
