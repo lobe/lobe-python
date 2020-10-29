@@ -48,6 +48,14 @@ for label, prop in result.labels:
 
 ## Resources
 
-If you're running this on a Pi and having issues, check this out:
+If you're running this on a Pi and having issues, and seeing this error:
 
-https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
+```bash
+Could not install packages due to an EnvironmentError: 404 Client Error: Not Found for url:  https://pypi.org/simple/tflite-runtime/ 
+```
+
+running this may help:
+
+```bash
+pip3 install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
+```
