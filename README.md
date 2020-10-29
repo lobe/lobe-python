@@ -48,6 +48,6 @@ for label, prop in result.labels:
 
 ## Resources
 
-If you're running this on a Pi, check this out:
+If you're running this on a Pi and having issues, check this out:
 
-https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdl.google.com%2Fcoral%2Fpython%2Ftflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl&data=04%7C01%7Cscusack%40microsoft.com%7Ca764dead35ee4625983408d87c393104%7C72f988bf86f141af91ab2d7cd011db47%7C0%7C0%7C637395933563998953%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C1000&sdata=aiTithClUQWvoEusDpt4cNK4tLhLfrtOSnsiGov3GhU%3D&reserved=0
+https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
