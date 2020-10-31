@@ -33,7 +33,7 @@ def load(model_path: str) -> Signature:
 class Signature:
     def __init__(self, signature_path: str):
         signature_path = pathlib.Path(signature_path)
-        self.__model_path = signature_path.parent
+        self.__model_path = str(signature_path.parent)
 
         with open(signature_path, "r") as f:
             self.__signature = json.load(f)

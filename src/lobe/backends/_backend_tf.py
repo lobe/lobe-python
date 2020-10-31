@@ -11,14 +11,13 @@ except ImportError:
 
 class ImageClassificationModel():
     __input_key_image = 'Image'
-    __input_key_batch_size = "batch_size"
-    __output_key_labels = 'Labels_idx_000'
-    __output_key_confidences = 'Labels_idx_001'
+    __output_key_confidences = 'Confidences'
     __output_key_prediction = 'Prediction'
 
     def __init__(self, signature):
         self.__model_path = signature.model_path
         self.__tf_predict_fn = None
+        self.__labels = signature.classes
 
     def __load(self):
         self.__tf_predict_fn = predictor.from_saved_model(self.__model_path)
@@ -34,11 +33,10 @@ class ImageClassificationModel():
         np_image = np_image[np.newaxis, ...]
 
         predictions = self.__tf_predict_fn({
-                self.__input_key_image: np_image,
-                self.__input_key_batch_size: 1 })
+                self.__input_key_image: np_image
+                })
 
-        labels = [label.decode('utf-8') for label in predictions[self.__output_key_labels][0].tolist()]
         confidences = predictions[self.__output_key_confidences][0]
         top_prediction = predictions[self.__output_key_prediction][0].decode('utf-8')
 
-        return PredictionResult(labels=labels, confidences=confidences, prediction=top_prediction)
+        return PredictionResult(labels=self.__labels, confidences=confidences, prediction=top_prediction)
