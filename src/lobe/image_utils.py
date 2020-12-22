@@ -1,9 +1,10 @@
-import sys
 from io import BytesIO
 from PIL import Image
+import numpy as np
 from typing import Tuple
-import urllib
+import requests
 import base64
+
 
 def crop_center(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     crop_width, crop_height = size
@@ -14,11 +15,13 @@ def crop_center(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     bottom = min(height, top + crop_height)
     return image.crop((left, top, right, bottom))
 
+
 def crop_center_square(image: Image.Image, size: Tuple[int, int]=None) -> Image.Image:
     if not size:
         width, height = image.size
         size = min(width, height)
     return crop_center(image, (size, size))
+
 
 def resize_uniform_to_fill(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     width, height = image.size
@@ -29,6 +32,7 @@ def resize_uniform_to_fill(image: Image.Image, size: Tuple[int, int]) -> Image.I
     new_size = (round(scale * width), round(scale * height))
     return image.resize(new_size)
 
+
 def resize_uniform_to_fit(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     width, height = image.size
     max_w, max_h = size
@@ -37,6 +41,7 @@ def resize_uniform_to_fit(image: Image.Image, size: Tuple[int, int]) -> Image.Im
     scale = min(max_w / width, max_h / height)
     new_size = (round(scale * width), round(scale * height))
     return image.resize(new_size)
+
 
 def update_orientation(image: Image.Image) -> Image.Image:
     exif_orientation_tag = 0x0112
@@ -54,20 +59,27 @@ def update_orientation(image: Image.Image) -> Image.Image:
                 image = image.transpose(Image.FLIP_LEFT_RIGHT)
     return image
 
+
 def ensure_rgb_format(image: Image.Image) -> Image.Image:
     return image.convert("RGB")
+
 
 def image_to_base64(image: Image.Image) -> str:
     buffer = BytesIO()
     ensure_rgb_format(image).save(buffer,format="JPEG")
     return base64.b64encode(buffer.getvalue()).decode("utf-8")
 
+
 def get_image_from_url(url: str) -> Image.Image:
-    path = BytesIO(urllib.request.urlopen(url).read())
-    return Image.open(path)
+    response = requests.get(url)
+    response.raise_for_status()
+    image = Image.open(BytesIO(response.content))
+    return image
+
 
 def get_image_from_file(path: str) -> Image.Image:
     return Image.open(path)
+
 
 def preprocess_image(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     image_processed = update_orientation(image)
@@ -77,3 +89,11 @@ def preprocess_image(image: Image.Image, size: Tuple[int, int]) -> Image.Image:
     image_processed = resize_uniform_to_fill(image_processed, size)
     image_processed = crop_center(image_processed, size)
     return image_processed
+
+
+def image_to_array(image: Image.Image) -> np.ndarray:
+    # make 0-1 float instead of 0-255 int (that PIL Image loads by default)
+    image = np.asarray(image) / 255.0
+    # pad with an extra batch dimension
+    image = np.expand_dims(image, axis=0).astype(np.float32)
+    return image
