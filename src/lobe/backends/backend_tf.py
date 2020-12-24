@@ -1,7 +1,6 @@
 from threading import Lock
 
 from ..signature import Signature
-from ..signature_constants import TENSOR_NAME
 from ..utils import decode_dict_bytes_as_str
 
 try:
@@ -18,19 +17,8 @@ class TFModel(object):
         self.lock = Lock()
         self.signature = signature
 
-        # placeholder for the tensorflow session
-        self.session = None
-        # load the model initially
-        self.load()
-
-    def load(self):
-        self.cleanup()
-        with self.lock:
-            # create a new tensorflow session
-            self.session = tf.compat.v1.Session(graph=tf.Graph())
-            # load our model into the session
-            tf.compat.v1.saved_model.loader.load(sess=self.session, tags=self.signature.tags,
-                                                     export_dir=self.signature.model_path)
+        self.model = tf.saved_model.load(export_dir=self.signature.model_path, tags=self.signature.tags)
+        self.predict_fn = self.model.signatures['serving_default']
 
     def predict(self, data):
         """
@@ -41,10 +29,6 @@ class TFModel(object):
 
         Returns a dictionary in the form of the signature outputs {Name: value, ...}
         """
-        # load the model if we don't have a session
-        if self.session is None:
-            self.load()
-
         with self.lock:
             # create the feed dictionary that is the input to the model
             feed_dict = {}
@@ -57,38 +41,20 @@ class TFModel(object):
                     raise ValueError(
                         f"Found more than 1 model input: {list(self.signature.inputs.keys())}, while supplied data wasn't a dictionary: {data}"
                     )
-                feed_dict[list(self.signature.inputs.values())[0].get(TENSOR_NAME)] = data
+                feed_dict[list(self.signature.inputs.keys())[0]] = tf.convert_to_tensor(data)
             else:
                 # otherwise, assign data to inputs based on the dictionary
-                for input_name, input_sig in self.signature.inputs.items():
+                for input_name in self.signature.inputs.keys():
                     if input_name not in data:
                         raise ValueError(f"Couldn't find input {input_name} in the supplied data {data}")
-                    feed_dict[input_sig.get(TENSOR_NAME)] = data.get(input_name)
-
-            # list the outputs we want from the model -- these come from our signature
-            # since we are using dictionaries that could have different orders, make tuples of (key, name) to keep track for putting
-            # the results back together in a dictionary
-            fetches = [(key, output.get(TENSOR_NAME)) for key, output in self.signature.outputs.items()]
+                    feed_dict[input_name] = tf.convert_to_tensor(data.get(input_name))
 
             # run the model! there will be as many outputs from session.run as you have in the fetches list
-            outputs = self.session.run(fetches=[name for _, name in fetches], feed_dict=feed_dict)
+            outputs = self.predict_fn(**feed_dict)
 
             # postprocessing! make our output dictionary and convert any byte strings to normal strings with .decode()
             results = {}
-            for i, (key, _) in enumerate(fetches):
-                results[key] = outputs[i].tolist()
+            for i, (key, tf_val) in enumerate(outputs.items()):
+                results[key] = tf_val.numpy().tolist()
             decode_dict_bytes_as_str(results)
             return results
-
-    def cleanup(self):
-        """
-        When you are done, free up memory by closing the TF session in this cleanup function
-        """
-        with self.lock:
-            # close our tensorflow session if one exists
-            if self.session is not None:
-                self.session.close()
-                self.session = None
-
-    def __del__(self):
-        self.cleanup()
