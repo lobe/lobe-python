@@ -1,5 +1,5 @@
 # Lobe Python API
-Code to run exported Lobe models in Python using the TensorFlow or TensorFlow Lite options.
+Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite, or ONNX options.
 
 ## Install
 ### Linux

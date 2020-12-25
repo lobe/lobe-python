@@ -9,7 +9,8 @@ requirements = [
     "pillow",
     "requests",
     "tensorflow==2.4;platform_machine!='armv7l'",
-    "numpy==1.19.2",
+    "numpy==1.19.3",
+    "onnxruntime==1.6.0"
 ]
 
 # get the right TF Lite runtime packages based on OS and python version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter

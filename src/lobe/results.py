@@ -104,6 +104,7 @@ def _un_batch(item):
         item = item[0]
     return item
 
+
 def _is_label_conf_pair(row):
     return (
             list_or_tuple(row) and len(row) > 0 and

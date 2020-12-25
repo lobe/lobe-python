@@ -23,8 +23,11 @@ class ImageModel(Model):
         elif model_format == "tf_lite":
             from ..backends.backend_tflite import TFLiteModel
             return cls(signature, TFLiteModel(signature))
+        elif model_format == "onnx":
+            from ..backends.backend_onnx import ONNXModel
+            return cls(signature, ONNXModel(signature))
         else:
-            raise ValueError("Model is an unsupported format")
+            raise ValueError(f"Model is an unsupported format: {model_format}")
 
     @classmethod
     def load(cls, model_path: str) -> ImageModel:
