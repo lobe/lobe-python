@@ -8,9 +8,9 @@ python_version = platform.python_version().rsplit('.', maxsplit=1)[0]
 requirements = [
     "pillow",
     "requests",
-    "tensorflow==2.4;platform_machine!='armv7l'",
     "numpy==1.19.3",
-    "onnxruntime==1.6.0"
+    "tensorflow==2.4;platform_machine!='armv7l'",
+    "onnxruntime==1.6.0;platform_machine!='armv7l'"
 ]
 
 # get the right TF Lite runtime packages based on OS and python version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter
