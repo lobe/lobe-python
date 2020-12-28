@@ -14,12 +14,14 @@ sudo apt install -y \
     libatlas-base-dev \
     libopenjp2-7 \
     libtiff5 \
-    libjpeg62-turbo
+    libjpeg62-dev
 
 # Install lobe-python
 pip3 install setuptools git
 pip3 install git+https://github.com/lobe/lobe-python
 ```
+
+_Note for Raspbian OS (Raspberry Pi)_: Please install `libjpeg62-turbo` instead of `libjpeg62-dev`
 
 ### Mac/Windows
 Use a virtual environment with Python 3.7
