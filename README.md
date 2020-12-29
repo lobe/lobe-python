@@ -71,14 +71,4 @@ Note: model predict functions should be thread-safe. If you find bugs please fil
 
 ## Resources
 
-If you're running this on a Pi and having issues, and seeing this error:
-
-```
-Could not install packages due to an EnvironmentError: 404 Client Error: Not Found for url:  https://pypi.org/simple/tflite-runtime/ 
-```
-
-running this may help:
-
-```shell script
-pip3 install https://github.com/google-coral/pycoral/releases/download/release-frogfish/tflite_runtime-2.5.0-cp37-cp37m-linux_armv7l.whl
-```
+See the [Raspberry Pi Trash Classifier](https://github.com/microsoft/TrashClassifier) example, and its [Adafruit Tutorial](https://learn.adafruit.com/lobe-trash-classifier-machine-learning).
