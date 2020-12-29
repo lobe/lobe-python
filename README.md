@@ -1,8 +1,9 @@
-# lobe-python
-Code to run exported Lobe models in Python.
+# Lobe Python API
+Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite, or ONNX options.
 
 ## Install
-```
+### Linux
+```shell script
 # Install Python3
 sudo apt update
 sudo apt install -y python3-dev python3-pip
@@ -13,15 +14,36 @@ sudo apt install -y \
     libatlas-base-dev \
     libopenjp2-7 \
     libtiff5 \
-    libjpeg62-turbo
+    libjpeg62-dev
 
 # Install lobe-python
 pip3 install setuptools git
 pip3 install git+https://github.com/lobe/lobe-python
 ```
 
-## Usage
+_Note for Raspbian OS (Raspberry Pi)_: Please install `libjpeg62-turbo` instead of `libjpeg62-dev`
+
+### Mac/Windows
+Use a virtual environment with Python 3.7
+```shell script
+python3 -m venv .venv
+
+# Mac:
+source .venv/bin/activate
+
+# Windows:
+.venv\Scripts\activate
 ```
+Install the library
+```shell script
+# make sure pip is up to date
+python -m pip install --upgrade pip
+# install
+pip install git+https://github.com/lobe/lobe-python
+```
+
+## Usage
+```python
 from lobe import ImageModel
 
 model = ImageModel.load('path/to/exported/model')
@@ -30,7 +52,7 @@ model = ImageModel.load('path/to/exported/model')
 result = model.predict_from_file('path/to/file.jpg')
 
 # OPTION 2: Predict from an image url
-result = model.predict_from_url('http://path/to/file.jpg')
+result = model.predict_from_url('http://url/to/file.jpg')
 
 # OPTION 3: Predict from Pillow image
 from PIL import Image
@@ -41,21 +63,12 @@ result = model.predict(img)
 print(result.prediction)
 
 # Print all classes
-for label, prop in result.labels:
-    print(f"{label}: {prop*100}%")
+for label, confidence in result.labels:
+    print(f"{label}: {confidence*100}%")
 
 ```
+Note: model predict functions should be thread-safe. If you find bugs please file an issue.
 
 ## Resources
 
-If you're running this on a Pi and having issues, and seeing this error:
-
-```bash
-Could not install packages due to an EnvironmentError: 404 Client Error: Not Found for url:  https://pypi.org/simple/tflite-runtime/ 
-```
-
-running this may help:
-
-```bash
-pip3 install https://dl.google.com/coral/python/tflite_runtime-2.1.0.post1-cp37-cp37m-linux_armv7l.whl
-```
+See the [Raspberry Pi Trash Classifier](https://github.com/microsoft/TrashClassifier) example, and its [Adafruit Tutorial](https://learn.adafruit.com/lobe-trash-classifier-machine-learning).

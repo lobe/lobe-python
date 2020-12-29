@@ -7,7 +7,7 @@ model = ImageModel.load('path/to/exported/model')
 result = model.predict_from_file('path/to/file.jpg')
 
 # Predict from an image url
-result = model.predict_from_url('http://path/to/file.jpg')
+result = model.predict_from_url('http://url/to/file.jpg')
 
 # Predict from Pillow image
 from PIL import Image
@@ -18,5 +18,5 @@ result = model.predict(img)
 print("Top prediction:", result.prediction)
 
 # Print all classes
-for label, prop in result.labels:
-    print(f"{label}: {prop*100:.6f}%")
+for label, confidence in result.labels:
+    print(f"{label}: {confidence*100:.6f}%")
