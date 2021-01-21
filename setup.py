@@ -5,6 +5,12 @@ import platform
 
 python_version = platform.python_version().rsplit('.', maxsplit=1)[0]
 
+mac_v, _, _ = platform.mac_ver()
+if mac_v != '':
+    mac_version = '.'.join(mac_v.split('.')[:2])
+else:
+    mac_version = None
+
 requirements = [
     "pillow",
     "requests",
@@ -30,7 +36,7 @@ elif python_version == '3.8':
 # get the right machine string
 if sys.platform == 'win32':
     tflite_machine = 'win_amd64'
-elif sys.platform == 'darwin':
+elif sys.platform == 'darwin' and mac_version == '10.15':
     tflite_machine = 'macosx_10_15_x86_64'
 elif sys.platform == 'linux':
     if platform.machine() == 'x86_64':
