@@ -1,4 +1,3 @@
-from __future__ import annotations
 import json
 from typing import List, Dict
 
@@ -20,7 +19,7 @@ class ClassificationResult:
     """
 
     @classmethod
-    def from_json(cls, json_str: str, labels: List[str] = None) -> ClassificationResult:
+    def from_json(cls, json_str: str, labels: List[str] = None):
         """
         Parse the classification results from a json string
         """

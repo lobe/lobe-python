@@ -1,7 +1,6 @@
 """
 Load a Lobe saved model for image classification
 """
-from __future__ import annotations
 from PIL import Image
 
 from .model import Model
@@ -14,7 +13,7 @@ class ImageModel(Model):
     signature: ImageClassificationSignature
 
     @classmethod
-    def load_from_signature(cls, signature: ImageClassificationSignature) -> ImageModel:
+    def load_from_signature(cls, signature: ImageClassificationSignature):
         # Select the appropriate backend
         model_format = signature.format
         if model_format == "tf":
@@ -30,7 +29,7 @@ class ImageModel(Model):
             raise ValueError(f"Model is an unsupported format: {model_format}")
 
     @classmethod
-    def load(cls, model_path: str) -> ImageModel:
+    def load(cls, model_path: str):
         # Load the signature
         return cls.load_from_signature(ImageClassificationSignature(model_path))
 
