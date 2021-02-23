@@ -3,6 +3,8 @@ Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite
 
 ## Install
 ### Linux
+Before running these commands, make sure that you have [git](https://git-scm.com/download/linux) installed.
+
 ```shell script
 # Install Python3
 sudo apt update
@@ -10,15 +12,11 @@ sudo apt install -y python3-dev python3-pip
 
 # Install Pillow dependencies
 sudo apt update
-sudo apt install -y \
-    libatlas-base-dev \
-    libopenjp2-7 \
-    libtiff5 \
-    libjpeg62-dev
+sudo apt install -y libatlas-base-dev libopenjp2-7 libtiff5 libjpeg62-dev
 
 # Install lobe-python
 pip3 install setuptools git
-pip3 install git+https://github.com/lobe/lobe-python
+pip3 install git+https://github.com/lobe/lobe-python --no-cache-dir
 ```
 
 _Note for Raspbian OS (Raspberry Pi)_: Please install `libjpeg62-turbo` instead of `libjpeg62-dev`
