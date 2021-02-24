@@ -15,7 +15,7 @@ sudo apt update
 sudo apt install -y libatlas-base-dev libopenjp2-7 libtiff5 libjpeg62-dev
 
 # Install lobe-python
-pip3 install setuptools git
+pip3 install setuptools
 pip3 install git+https://github.com/lobe/lobe-python --no-cache-dir
 ```
 
