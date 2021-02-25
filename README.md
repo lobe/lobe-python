@@ -5,6 +5,8 @@ Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite
 ### Linux
 Before running these commands, make sure that you have [git](https://git-scm.com/download/linux) installed.
 
+_Note: For Raspbian OS (Raspberry Pi), please install `libjpeg62-turbo` instead of `libjpeg62-dev`._
+
 ```shell script
 # Install Python3
 sudo apt update
@@ -19,26 +21,33 @@ pip3 install setuptools
 pip3 install git+https://github.com/lobe/lobe-python --no-cache-dir
 ```
 
-_Note for Raspbian OS (Raspberry Pi)_: Please install `libjpeg62-turbo` instead of `libjpeg62-dev`
 
-### Mac/Windows
-Use a virtual environment with Python 3.7
+
+### Windows
+Use a virtual environment with Python 3.7 or Python 3.8.
 ```shell script
-python3 -m venv .venv
-
-# Mac:
-source .venv/bin/activate
-
-# Windows:
+#Set up a virtual environment
+py -3.8 -m venv .venv
 .venv\Scripts\activate
-```
-Install the library
-```shell script
-# make sure pip is up to date
+
+# Install lobe-python
 python -m pip install --upgrade pip
-# install
 pip install git+https://github.com/lobe/lobe-python
 ```
+
+
+### macOS
+Use a virtual environment with Python 3.7 or Python 3.8.
+```shell script
+#Set up a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install lobe-python
+python -m pip install --upgrade pip
+pip install git+https://github.com/lobe/lobe-python
+```
+
 
 ## Usage
 ```python
