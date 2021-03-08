@@ -19,7 +19,12 @@ pip3 install setuptools
 pip3 install git+https://github.com/lobe/lobe-python --no-cache-dir
 ```
 
-_Note for Raspbian OS (Raspberry Pi)_: Please install `libjpeg62-turbo` instead of `libjpeg62-dev`
+For Raspberry Pi OS (Raspian) run:
+```shell script
+cd ~
+wget https://raw.githubusercontent.com/lobe/lobe-python/master/scripts/lobe-rpi-install.sh
+sudo ./lobe-rpi-install.sh
+```
 
 ### Mac/Windows
 Use a virtual environment with Python 3.7
