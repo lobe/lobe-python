@@ -12,11 +12,11 @@ else:
     mac_version = None
 
 requirements = [
-    "pillow",
+    "pillow>=8.1.1",
     "requests",
-    "numpy==1.19.3",
-    "tensorflow==2.4;platform_machine!='armv7l'",
-    "onnxruntime==1.6.0;platform_machine!='armv7l'"
+    "numpy~=1.19.3",
+    "tensorflow~=2.4;platform_machine!='armv7l'",
+    "onnxruntime~=1.7.0;platform_machine!='armv7l'"
 ]
 
 # get the right TF Lite runtime packages based on OS and python version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter
@@ -54,7 +54,7 @@ else:
 
 setup(
     name="lobe",
-    version="0.3.0",
+    version="0.4.0",
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=requirements,

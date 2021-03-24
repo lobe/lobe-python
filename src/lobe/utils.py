@@ -4,12 +4,12 @@ Some utility functions
 from typing import Dict, List, Tuple, Optional, Union
 
 
-def dict_get_compat(in_dict: Dict[str, any], current_key: str, compat_keys: List[str], default: any = None) -> Tuple[any, Optional[str]]:
+def dict_get_compat(in_dict: Dict[str, any], current_key: Optional[str], compat_keys: List[str], default: any = None) -> Tuple[any, Optional[str]]:
     """
     Given a dictionary, an expected key, and a list of older compatibility keys, return the first found value
     from the dict and which key it was.
     """
-    test_keys = [current_key] + compat_keys
+    test_keys = [current_key] + compat_keys if current_key else compat_keys
     for key in test_keys:
         if key in in_dict:
             return in_dict[key], key

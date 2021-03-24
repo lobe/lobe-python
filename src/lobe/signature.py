@@ -3,7 +3,8 @@ import json
 import pathlib
 from typing import List, Dict
 from .signature_constants import (
-    ID, NAME, VERSION, FORMAT, FILENAME, TAGS, CLASSES_KEY, LABELS_LIST, INPUTS, OUTPUTS, IMAGE_INPUT, TENSOR_SHAPE
+    ID, NAME, VERSION, FORMAT, FILENAME, TAGS, CLASSES_KEY, LABELS_LIST, INPUTS, OUTPUTS, IMAGE_INPUT, TENSOR_SHAPE,
+    EXPORT_VERSION, LEGACY_EXPORT_VERSION
 )
 
 
@@ -42,7 +43,7 @@ class Signature(object):
         signature_path = get_signature_path(model_or_sig_path)
         self.model_path = str(signature_path.parent)
 
-        with open(signature_path, "r") as f:
+        with open(signature_path, "r", encoding="utf8") as f:
             self._signature = json.load(f)
 
         self.id: str = self._signature.get(ID)
@@ -51,6 +52,7 @@ class Signature(object):
         self.format: str = self._signature.get(FORMAT)
         self.filename: str = self._signature.get(FILENAME)
         self.tags: List[str] = self._signature.get(TAGS)
+        self.export_version: int = self._signature.get(EXPORT_VERSION, LEGACY_EXPORT_VERSION)
 
         self.inputs: Dict[any, any] = self._signature.get(INPUTS)
         self.outputs: Dict[any, any] = self._signature.get(OUTPUTS)

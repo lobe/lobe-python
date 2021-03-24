@@ -47,5 +47,7 @@ class ImageModel(Model):
         image_processed = image_utils.preprocess_image(image, self.signature.input_image_size)
         image_array = image_utils.image_to_array(image_processed)
         results = self.backend.predict(image_array)
-        classification_results = ClassificationResult(results=results, labels=self.signature.classes)
+        classification_results = ClassificationResult(
+            results=results, labels=self.signature.classes, export_version=self.signature.export_version
+        )
         return classification_results
