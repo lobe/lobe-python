@@ -27,7 +27,7 @@ sudo ./lobe-rpi-install.sh
 ```
 
 ### Mac/Windows
-Use a virtual environment with Python 3.7
+Use a virtual environment with Python 3.7 or 3.8
 ```shell script
 python3 -m venv .venv
 
