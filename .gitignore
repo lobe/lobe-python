@@ -1,3 +1,6 @@
+#pycharm
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -109,6 +112,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.v36
+.v37
+.v38
 
 # Spyder project settings
 .spyderproject
