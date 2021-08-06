@@ -1,61 +1,87 @@
 from setuptools import setup, find_packages
 import sys
+import pathlib
 import platform
 
+parent = pathlib.Path(__file__).parent
+# get the readme for use in our long description
+readme = (parent / "README.md").read_text()
 
 python_version = platform.python_version().rsplit('.', maxsplit=1)[0]
 
 mac_v, _, _ = platform.mac_ver()
 if mac_v != '':
-    mac_version = '.'.join(mac_v.split('.')[:2])
+    mac_v_split = mac_v.split('.')
+    mac_major_version = mac_v_split[0]
+    mac_minor_version = mac_v_split[1]
+    mac_version = '.'.join([mac_major_version, mac_minor_version])
 else:
+    mac_major_version = None
     mac_version = None
 
 requirements = [
-    "pillow>=8.1.1",
-    "requests",
-    "numpy~=1.19.3",
-    "tensorflow~=2.4;platform_machine!='armv7l'",
-    "onnxruntime~=1.7.0;platform_machine!='armv7l'"
+    "numpy~=1.19.5",
+    "pillow~=8.3.1",
+    "requests"
 ]
+tf_req = "tensorflow~=2.5.0;platform_machine!='armv7l'"
+onnx_req = "onnxruntime~=1.8.1;platform_machine!='armv7l'"
+tflite_req = None
 
 # get the right TF Lite runtime packages based on OS and python version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter
 tflite_python = None
+tflite_platform = None
 tflite_machine = None
 
 # get the right python string for the version
-if python_version == '3.5':
-    tflite_python = 'cp35-cp35m'
-elif python_version == '3.6':
+if python_version == '3.6':
     tflite_python = 'cp36-cp36m'
 elif python_version == '3.7':
     tflite_python = 'cp37-cp37m'
 elif python_version == '3.8':
     tflite_python = 'cp38-cp38'
+elif python_version == '3.9':
+    tflite_python = 'cp39-cp39'
 
-# get the right machine string
-if sys.platform == 'win32':
-    tflite_machine = 'win_amd64'
-elif sys.platform == 'darwin' and mac_version == '10.15':
-    tflite_machine = 'macosx_10_15_x86_64'
-elif sys.platform == 'linux':
-    if platform.machine() == 'x86_64':
-        tflite_machine = 'linux_x86_64'
-    elif platform.machine() == 'armv7l':
-        tflite_machine = 'linux_armv7l'
+# get the right platform and machine strings for the tflite_runtime wheel URL
+sys_platform = sys.platform.lower()
+machine = platform.machine().lower()
+if sys_platform == 'linux':
+    tflite_platform = sys_platform
+    tflite_machine = machine
+elif sys_platform == 'win32':
+    tflite_platform = 'win'
+    tflite_machine = machine
+elif sys_platform == 'darwin' and machine == 'x86_64':
+    if mac_version == '10.15':
+        tflite_platform = 'macosx_10_15'
+    elif mac_major_version == '11':
+        tflite_platform = 'macosx_11_0'
+    tflite_machine = machine
 
 # add it to the requirements, or print the location to find the version to install
-if tflite_python and tflite_machine:
-    requirements.append(f"tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/release-frogfish/tflite_runtime-2.5.0-{tflite_python}-{tflite_machine}.whl")
+if tflite_python and tflite_platform and tflite_machine:
+    tflite_req = f"tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-{tflite_python}-{tflite_platform}_{tflite_machine}.whl"
 else:
     print(
-        f"Couldn't find tflite_runtime for your platform {sys.platform}, machine {platform.machine()}, and python version {python_version}, please see the install guide for the right version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter"
+        f"Couldn't find tflite_runtime for your platform {sys.platform}, machine {platform.machine()}, python version {python_version}, and mac version {mac_version}. If you are trying to use TensorFlow Lite, please see the install guide for the right version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter"
     )
 
 setup(
     name="lobe",
-    version="0.4.0",
+    version="0.5.0",
+    description="Lobe Python SDK",
+    long_description=readme,
+    long_description_content_type="text/markdown",
+    url="https://github.com/lobe/lobe-python",
+    license="MIT",
     packages=find_packages("src"),
     package_dir={"": "src"},
     install_requires=requirements,
+    extras_require={
+        'all': [tf_req, onnx_req, tflite_req],
+        'tf': [tf_req],
+        'onnx': [onnx_req],
+        'tflite': [tflite_req],
+    }
 )

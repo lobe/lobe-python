@@ -1,7 +1,29 @@
 # Lobe Python API
 Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite, or ONNX options.
 
+Works with Python 3.6, 3.7, or 3.8, untested for other versions.
+
 ## Install
+### Backend options with pip
+You can install each of the backends on an individual basis, or all together through pip like so:
+```shell
+# For all of the supported backends (TensorFlow, TensorFlow Lite, ONNX)
+pip install lobe[all]
+
+# For TensorFlow only
+pip install lobe[tf]
+
+# For TensorFlow Lite only
+pip install lobe[tflite]
+
+# For ONNX only
+pip install lobe[onnx]
+```
+
+Installing lobe-python without any options (`pip install lobe`) will only install the base requirements, no backends will be installed.
+If you try to load a model with a backend that hasn't been installed, an error message will
+show you the instructions to install the correct backend.
+
 ### Linux
 Before running these commands, make sure that you have [git](https://git-scm.com/download/linux) installed.
 
@@ -16,7 +38,8 @@ sudo apt install -y libatlas-base-dev libopenjp2-7 libtiff5 libjpeg62-dev
 
 # Install lobe-python
 pip3 install setuptools
-pip3 install git+https://github.com/lobe/lobe-python --no-cache-dir
+# Swap out the 'all' option here for your desired backend from 'backend options with pip' above.
+pip3 install lobe[all]
 ```
 
 For Raspberry Pi OS (Raspian) run:
@@ -27,7 +50,7 @@ sudo ./lobe-rpi-install.sh
 ```
 
 ### Mac/Windows
-Use a virtual environment with Python 3.7 or 3.8
+We recommend using a virtual environment:
 ```shell script
 python3 -m venv .venv
 
@@ -39,10 +62,10 @@ source .venv/bin/activate
 ```
 Install the library
 ```shell script
-# make sure pip is up to date
+# Make sure pip is up to date
 python -m pip install --upgrade pip
-# install
-pip install git+https://github.com/lobe/lobe-python
+# Swap out the 'all' option here for your desired backend from 'backend options with pip' above.
+pip install lobe[all]
 ```
 
 ## Usage

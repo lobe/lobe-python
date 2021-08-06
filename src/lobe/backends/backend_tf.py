@@ -6,7 +6,7 @@ from ..utils import decode_dict_bytes_as_str
 try:
     import tensorflow as tf
 except ImportError:
-    raise ImportError("ERROR: This is a TensorFlow model and requires tensorflow to be installed on this device. Please run\n\tpip install tensorflow==2.4\n")
+    raise ImportError("ERROR: This is a TensorFlow model and requires tensorflow to be installed on this device. Please install lobe-python with lobe[tf] or lobe[all] options. If that doesn't work, please go to https://www.tensorflow.org/install for instructions.")
 
 
 class TFModel(object):

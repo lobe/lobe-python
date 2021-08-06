@@ -9,7 +9,7 @@ try:
 except ImportError:
     # Needs better error text
     raise ImportError(
-        "ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. Please go to https://www.tensorflow.org/lite/guide/python and download the appropriate version for you device."
+        "ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. Please install lobe-python with lobe[tflite] or lobe[all] options. If that doesn't work, please go to https://www.tensorflow.org/lite/guide/python and download the appropriate version for you device."
     )
 
 
