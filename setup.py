@@ -62,6 +62,10 @@ elif sys_platform == 'darwin' and machine == 'x86_64':
 # add it to the requirements, or print the location to find the version to install
 if tflite_python and tflite_platform and tflite_machine:
     tflite_req = f"tflite_runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.5.0.post1-{tflite_python}-{tflite_platform}_{tflite_machine}.whl"
+else:
+    print(
+        f"Couldn't find tflite_runtime for your platform {sys.platform}, machine {platform.machine()}, python version {python_version}, and mac version {mac_version}. If you are trying to use TensorFlow Lite, please see the install guide for the right version: https://www.tensorflow.org/lite/guide/python#install_just_the_tensorflow_lite_interpreter"
+    )
 
 setup(
     name="lobe",

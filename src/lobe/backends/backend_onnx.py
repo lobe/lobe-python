@@ -9,7 +9,7 @@ try:
 except ImportError:
     # Needs better error text
     raise ImportError(
-        "ERROR: This is an ONNX model and requires onnx runtime to be installed on this device. Please go to https://www.onnxruntime.ai/ for install instructions."
+        "ERROR: This is an ONNX model and requires onnx runtime to be installed on this device. Please install lobe-python with lobe[onnx] or lobe[all] options. If that doesn't work, please go to https://www.onnxruntime.ai/ for install instructions."
     )
 
 
