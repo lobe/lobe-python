@@ -1,3 +1,10 @@
+# Release 0.4.0
+___
+## Bug Fixes and Other Improvements
+* Fix API return signature for Lobe 0.9
+* Make backwards-compatible with earlier versions of model exports
+
+
 # Release 0.3.0
 ___
 ## Breaking Changes
