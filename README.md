@@ -47,6 +47,7 @@ For Raspberry Pi OS (Raspian) run:
 ```shell script
 cd ~
 wget https://raw.githubusercontent.com/lobe/lobe-python/master/scripts/lobe-rpi-install.sh
+chmod 755 lobe-rpi-install.sh
 sudo ./lobe-rpi-install.sh
 ```
 
