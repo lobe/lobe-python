@@ -78,9 +78,9 @@ setup(
     package_dir={"": "src"},
     install_requires=requirements,
     extras_require={
-        'all': [tf_req, onnx_req, tflite_req],
+        'all': [tf_req, onnx_req],
         'tf': [tf_req],
         'onnx': [onnx_req],
-        'tflite': [tflite_req],
+        #'tflite': [tflite_req],
     }
 )

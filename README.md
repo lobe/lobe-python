@@ -1,7 +1,7 @@
 # Lobe Python API
 Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite, or ONNX options.
 
-Works with Python 3.6, 3.7, or 3.8, untested for other versions.
+Works with Python 3.6, 3.7, and 3.8 untested for other versions.
 
 ## Install
 ### Backend options with pip
@@ -13,8 +13,9 @@ pip install lobe[all]
 # For TensorFlow only
 pip install lobe[tf]
 
-# For TensorFlow Lite only
-pip install lobe[tflite]
+# For TensorFlow Lite only -- this requires two steps for the runtime and for lobe (note for Raspberry Pi see our setup script in scripts/lobe-rpi-install.sh)
+pip install --index-url https://google-coral.github.io/py-repo/ tflite_runtime 
+pip install lobe
 
 # For ONNX only
 pip install lobe[onnx]
@@ -72,7 +73,7 @@ pip install lobe[all]
 ```python
 from lobe import ImageModel
 
-model = ImageModel.load('path/to/exported/model')
+model = ImageModel.load('path/to/exported/model/folder')
 
 # OPTION 1: Predict from an image file
 result = model.predict_from_file('path/to/file.jpg')

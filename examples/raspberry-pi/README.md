@@ -24,12 +24,13 @@ It is assumed you are starting with a Pi in a remote headless configuration alre
 2. Power up your Pi and log in to the desktop view.
 3. On the Pi, open a terminal window and create a directory where you want to store your Lobe model and code. For example, in the /home/pi folder:
     ```
-        mkdir Lobe
+    mkdir Lobe
     ```
-4. Navigate into your Lobe directory, and download the setuptools and the lobe-python package:
+4. Navigate into your Lobe directory, and install the lobe-python package:
     ```
-        pip3 install setuptools
-        pip3 install git+https://github.com/lobe/lobe-python
+    cd Lobe
+    wget https://raw.githubusercontent.com/lobe/lobe-python/master/scripts/lobe-rpi-install.sh
+    sudo ./lobe-rpi-install.sh
     ```
 
 ## Getting the Lobe TF Model on your Pi
@@ -52,8 +53,4 @@ It is assumed you are starting with a Pi in a remote headless configuration alre
 ### Troubleshooting
 1. Check that the Pi power light is bright red. A dim red light indicates insufficient power.
 2. Be sure you're installing and running your TF code using Python 3.
-3. If the TensorFlow module is not recognized, try re-installing:
-    ''' 
-        pip3 install tensorflow == 1.13.1
-    '''
-4. If you're using multiple components, be sure they are all connected to the same common ground.
+3. If you're using multiple components, be sure they are all connected to the same common ground.
