@@ -2,7 +2,7 @@
 ___
 ## Breaking Changes
 * Install Lobe with your desired backend options through pip -- `pip install lobe[all]` for everything,
-`pip install lobe[tf]` for tensorflow, `pip install lobe[tflite]` for tensorflow lite, `pip install lobe[onnx]` for onnx.
+`pip install lobe[tf]` for tensorflow, `pip install --index-url https://google-coral.github.io/py-repo/ tflite_runtime; pip install lobe` for tensorflow lite, `pip install lobe[onnx]` for onnx.
 
 
 # Release 0.4.0
