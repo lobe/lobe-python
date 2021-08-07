@@ -3,14 +3,17 @@ from ..signature import Signature
 from ..signature_constants import TENSOR_NAME
 from ..utils import decode_dict_bytes_as_str
 
+# first try to import the tflite interpreter from TensorFlow base library (if we have both installed) to avoid a collision
 try:
-    import tflite_runtime.interpreter as tflite
-
+    import tensorflow.lite as tflite
 except ImportError:
-    # Needs better error text
-    raise ImportError(
-        "ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. Please install lobe-python with lobe[tflite] or lobe[all] options. If that doesn't work, please go to https://www.tensorflow.org/lite/guide/python and download the appropriate version for you device."
-    )
+    try:
+        import tflite_runtime.interpreter as tflite
+
+    except ImportError:
+        raise ImportError(
+            "ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. Please install lobe-python with lobe[tflite] or lobe[all] options. If that doesn't work, please go to https://www.tensorflow.org/lite/guide/python and download the appropriate version for you device."
+        )
 
 
 class TFLiteModel(object):

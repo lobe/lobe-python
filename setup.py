@@ -20,7 +20,6 @@ else:
     mac_version = None
 
 requirements = [
-    "numpy~=1.19.5",
     "pillow~=8.3.1",
     "requests"
 ]
