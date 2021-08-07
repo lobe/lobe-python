@@ -8,7 +8,7 @@ from lobe import ImageModel
 # Create a camera object
 camera = PiCamera()
 
-# Load Lobe TF model
+# Load Lobe TF Lite model
 # --> Change model path
 model = ImageModel.load('/home/pi/model')
 
@@ -32,6 +32,6 @@ if __name__ == '__main__':
     # Run photo through Lobe TF model and get prediction results
     result = model.predict_from_file('/home/pi/Documents/image.jpg')
 
-    print(result)
+    print(result.labels)
 
     sleep(1)

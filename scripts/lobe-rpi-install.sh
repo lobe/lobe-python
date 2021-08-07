@@ -10,6 +10,6 @@ sudo apt install -y \
     libtiff5 \
     libjpeg62-turbo
 sudo apt-get install -y git
-# Install lobe-python with TensorFlow Lite backend (ONNX backend could also work for Raspberry Pi)
 sudo pip3 install setuptools
+# Install lobe-python with TensorFlow Lite backend
 sudo pip3 install lobe[tflite]
