@@ -1,7 +1,7 @@
 """
 Load a Lobe saved model for image classification
 """
-from typing import Dict, Union, Optional
+from typing import Dict, Union, Optional, List
 
 import numpy as np
 from PIL import Image
@@ -18,7 +18,6 @@ from ..results import ClassificationResult
 
 class VizEnum:
     GRADCAM_PLUSPLUS = 'gradcam_plusplus'
-    CNN_FIXATIONS = 'fixations'
 
 
 class ImageModel(Model):
@@ -71,12 +70,12 @@ class ImageModel(Model):
 
     def visualize(
             self,
-            image: Image.Image,
-            label: str = None,
+            image: Union[Image.Image, List[Image.Image]],
+            label: Union[Optional[str], List[Optional[str]]] = None,
             viz: Optional[str] = VizEnum.GRADCAM_PLUSPLUS,
             colormap: Union[str, Colormap] = None,
             opacity=0.5
-    ) -> Union[Image.Image, Dict[str, Image.Image]]:
+    ) -> Union[Union[Image.Image, List[Image.Image]], Dict[str, Union[Image.Image, List[Image.Image]]]]:
         """
         Visualize what the image classification model is using for its output prediction.
         If label is not supplied, it will use the predicted label from running the model on the image.
@@ -87,26 +86,50 @@ class ImageModel(Model):
             VizEnum.CNN_FIXATIONS: CNN Fixations (https://arxiv.org/abs/1708.06670) Mopuri et al.
         If 'None' option is given, this will return a dictionary with all options -
         where the key is the same as the options above and the value is the image.
+
+        This also works in batch mode -- pass a list of images and list of desired labels (or None for using
+        the predicted label).
         """
         if viz is not None and viz not in self._viz_functions:
             raise ValueError(
                 f"Visualization option `{viz}` not recognized, try one of: {list(self._viz_functions.keys())}."
             )
 
-        image_processed = image_utils.preprocess_image(image, self.signature.input_image_size)
-        image_array = image_utils.image_to_array(image_processed)
+        # if a single image was passed, promote it to a list so we work in batch mode (and keep track if it was a list)
+        is_batched = True
+        if not isinstance(image, list):
+            is_batched = False
+            image = [image]
+
+        # similarly promote the label to a list if it isn't
+        if label is not None and not isinstance(label, list):
+            label = [label]
+
+        if isinstance(image, list) and isinstance(label, list) and len(image) != len(label):
+            raise ValueError(
+                f"Number of images doesn't match the supplied number of labels. Images: {len(image)} | Labels: {len(label)}"
+            )
+
+        preprocessed_images = [image_utils.preprocess_image(img, self.signature.input_image_size) for img in image]
+        image_arrays = np.concatenate([image_utils.image_to_array(img) for img in preprocessed_images])
 
         viz_return = {}
         for viz_name, viz_func in self._viz_functions.items():
             if viz is None or viz == viz_name:
-                viz_heatmap = viz_func(image_array, label)
-                viz_img = _image_from_heatmap(
-                    heatmap=viz_heatmap,
-                    image=image_processed,
-                    opacity=opacity,
-                    colormap=colormap
-                )
-                viz_return[viz_name] = viz_img
+                viz_heatmaps = viz_func(image_arrays, label)
+                heatmaps_and_images = zip(viz_heatmaps, preprocessed_images)
+                combined_viz = [
+                    _image_from_heatmap(
+                        heatmap=viz_heatmap,
+                        image=img,
+                        opacity=opacity,
+                        colormap=colormap
+                    )
+                    for viz_heatmap, img in heatmaps_and_images
+                ]
+                if not is_batched:
+                    combined_viz = combined_viz[0]
+                viz_return[viz_name] = combined_viz
 
         if viz is not None:
             viz_return = viz_return.get(viz)
@@ -122,8 +145,8 @@ def _image_from_heatmap(heatmap: np.ndarray, image: Image.Image, opacity=0.5, co
     # make sure our heatmap is resized to be same shape as image
     width, height = image.size  # pillow image
 
-    # un-batch the heatmap to a single image
-    if heatmap.shape[0] == 1:
+    # un-batch the heatmap to a single image if needed
+    if len(heatmap.shape) == 3 and heatmap.shape[0] == 1:
         heatmap = np.squeeze(heatmap, axis=0)
 
     # Use inferno colormap by default to colorize heatmap, unless supplied kwarg
