@@ -160,22 +160,3 @@ class TFImageModel(TFModel, ImageBackend):
                         queue.append(input_tensor)
 
         return last_fc_tensor, last_conv_tensor
-
-
-"""
-from src.lobe.model.image_model import ImageModel
-import numpy as np
-from src.lobe import image_utils
-model=ImageModel.load('../../Desktop/ctf')
-model2=ImageModel.load('../../Desktop/ctf_acc')
-image1=image_utils.image_to_array(image_utils.preprocess_image(image_utils.get_image_from_url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Akita_Inu_dog.jpg/1200px-Akita_Inu_dog.jpg'), model.signature.input_image_size))
-image2=image_utils.image_to_array(image_utils.preprocess_image(image_utils.get_image_from_url('https://images.squarespace-cdn.com/content/v1/5a2c764af43b551b489c752d/1519112194919-IF8HBNVNKAB2A8PTV9O9/javacatscafe18Feb20180118.jpg?format=2500w'), model.signature.input_image_size))
-image=np.vstack([image1, image2])
-
-model2.visualize(image_utils.get_image_from_url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Akita_Inu_dog.jpg/1200px-Akita_Inu_dog.jpg'))
-model2.visualize(image_utils.get_image_from_url('https://images.squarespace-cdn.com/content/v1/5a2c764af43b551b489c752d/1519112194919-IF8HBNVNKAB2A8PTV9O9/javacatscafe18Feb20180118.jpg?format=2500w'))
-
-model.backend.gradcam_plusplus(image1)
-model.backend.gradcam_plusplus(image2)
-model.backend.gradcam_plusplus(image, ['cat', 'dog'])
-"""
