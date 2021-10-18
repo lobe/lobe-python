@@ -1,7 +1,13 @@
 from threading import Lock
-from ..signature import Signature
-from ..signature_constants import TENSOR_NAME
-from ..utils import decode_dict_bytes_as_str
+from ..backend import Backend
+from ...signature import Signature
+from ...signature_constants import TENSOR_NAME
+from ...utils import decode_dict_bytes_as_str
+
+TFLITE_IMPORT_ERROR = """
+ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. 
+Please go to https://www.tensorflow.org/lite/guide/python#install_tensorflow_lite_for_python for installation instructions for you device.
+"""
 
 # first try to import the tflite interpreter from TensorFlow base library (if we have both installed) to avoid a collision
 try:
@@ -11,20 +17,18 @@ except ImportError:
         import tflite_runtime.interpreter as tflite
 
     except ImportError:
-        raise ImportError(
-            "ERROR: This is a TensorFlow Lite model and requires TensorFlow Lite interpreter to be installed on this device. Please go to https://www.tensorflow.org/lite/guide/python#install_tensorflow_lite_for_python for installation instructions for you device."
-        )
+        raise ImportError(TFLITE_IMPORT_ERROR)
 
 
-class TFLiteModel(object):
+class TFLiteModel(Backend):
     """
     Generic wrapper for running a TF Lite model exported from Lobe
     """
     def __init__(self, signature: Signature):
+        super(TFLiteModel, self).__init__(signature=signature)
         model_path = "{}/{}".format(
             signature.model_path, signature.filename
         )
-        self.signature = signature
         self.interpreter = tflite.Interpreter(model_path=model_path)
         self.interpreter.allocate_tensors()
 

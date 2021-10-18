@@ -21,7 +21,8 @@ else:
 
 requirements = [
     "pillow~=8.3.1",
-    "requests"
+    "requests",
+    "matplotlib~=3.4.3",
 ]
 tf_req = "tensorflow~=2.5.0;platform_machine!='armv7l'"
 onnx_req = "onnxruntime~=1.8.1;platform_machine!='armv7l'"
@@ -68,7 +69,7 @@ else:
 
 setup(
     name="lobe",
-    version="0.5.0",
+    version="0.6.0",
     description="Lobe Python SDK",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -81,6 +82,5 @@ setup(
         'all': [tf_req, onnx_req],
         'tf': [tf_req],
         'onnx': [onnx_req],
-        #'tflite': [tflite_req],
     }
 )

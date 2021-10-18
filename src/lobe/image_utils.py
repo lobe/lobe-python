@@ -97,3 +97,12 @@ def image_to_array(image: Image.Image) -> np.ndarray:
     # pad with an extra batch dimension
     image = np.expand_dims(image, axis=0).astype(np.float32)
     return image
+
+
+def array_to_image(image: np.ndarray) -> Image.Image:
+    # make the input array 0-255 int
+    image = np.uint8(image * 255)
+    # squeeze extra batch dimension if it exists
+    if image.shape[0] == 1:
+        image = np.squeeze(image, axis=0)
+    return Image.fromarray(image)
