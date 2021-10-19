@@ -20,7 +20,7 @@ else:
     mac_version = None
 
 requirements = [
-    "pillow~=8.3.1",
+    "pillow~=8.4.0",
     "requests",
     "matplotlib~=3.4.3",
 ]
