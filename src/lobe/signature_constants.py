@@ -40,3 +40,8 @@ TENSOR_DTYPE = 'dtype'
 
 # Special known input key
 IMAGE_INPUT = 'Image'
+
+# Values of our model types
+TF_MODEL = 'tf'
+TFLITE_MODEL = 'tf_lite'
+ONNX_MODEL = 'onnx'

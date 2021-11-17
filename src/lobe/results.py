@@ -7,6 +7,8 @@ from .signature_constants import (
 )
 from .utils import dict_get_compat
 
+BackendResult = Dict[str, any]
+
 
 class ClassificationResult:
     """
@@ -19,7 +21,7 @@ class ClassificationResult:
     These can be batched and contain the results for many examples.
     """
 
-    def __init__(self, results: Dict[str, any], labels: List[str] = None, export_version: int = None):
+    def __init__(self, results: BackendResult, labels: List[str] = None, export_version: int = None):
         """
         Parse the classification results from a dictionary in the form {Name: val} for each output in the signature
 

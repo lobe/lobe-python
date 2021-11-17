@@ -1,7 +1,7 @@
 # Lobe Python API
 Code to run exported Lobe models in Python using the TensorFlow, TensorFlow Lite, or ONNX options.
 
-Works with Python 3.6, 3.7, and 3.8 untested for other versions.
+Works with Python 3.6, 3.7, 3.8, and 3.9 untested for other versions.
 
 ## Install
 ### Backend options with pip
@@ -94,6 +94,10 @@ print(result.prediction)
 for label, confidence in result.labels:
     print(f"{label}: {confidence*100}%")
 
+# Visualize the heatmap of the prediction on the image 
+# this shows where the model was looking to make its prediction.
+heatmap = model.visualize(img)
+heatmap.show()
 ```
 Note: model predict functions should be thread-safe. If you find bugs please file an issue.
 

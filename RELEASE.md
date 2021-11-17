@@ -1,3 +1,23 @@
+# Release 0.6.0
+___
+## Breaking Changes
+* Refactored the ML backends into sub-folders:
+  * `TFModel` class: `backends/backend_tf.py -> backends/tf/backend.py`
+  * `TFLiteModel` class: `backends/backend_tflite.py -> backends/tflite/backend.py`
+  * `ONNXModel` class: `backends/backend_onnx.py -> backends/onnx/backend.py`
+
+## Bug Fixes and Other Improvements
+* Added `Backend` and `ImageBackend` abstract base classes in `backends/backend.py`
+* Added ImageBackend classes for each ML backend:
+  * `TFImageModel` class: `backends/tf/image_backend.py`
+  * `TFLiteImageModel` class: `backends/tflite/image_backend.py`
+  * `ONNXImageModel` class: `backends/onnx/image_backend.py`
+* Added Grad-CAM++ implementation (`ImageBackend.gradcam_plusplus(image, label) -> np.ndarray`) for visualizing 
+convolutional neural network heatmaps for explaining why the model predicted a certain label. 
+_Note:_ Grad-CAM++ only implemented currently in `TFImageModel` for TensorFlow Lobe model exports.
+The visualization can be called from the top-level API of `ImageModel` -> `ImageModel.visualize(image)`
+
+
 # Release 0.5.0
 ___
 ## Breaking Changes
