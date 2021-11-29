@@ -69,7 +69,7 @@ else:
 
 setup(
     name="lobe",
-    version="0.6.0",
+    version="0.6.1",
     description="Lobe Python SDK",
     long_description=readme,
     long_description_content_type="text/markdown",
