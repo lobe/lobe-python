@@ -1,3 +1,10 @@
+# Release 0.6.1
+___
+## Bug Fixes and Other Improvements
+Fix super invocations for onnx and tflite backends -- Calling `predict()` was broken because `self.lock` has not been
+assigned.
+
+
 # Release 0.6.0
 ___
 ## Breaking Changes
