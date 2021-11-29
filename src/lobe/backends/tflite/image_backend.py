@@ -5,7 +5,7 @@ from ...signature import ImageClassificationSignature
 
 class TFLiteImageModel(TFLiteModel, ImageBackend):
     def __init__(self, signature: ImageClassificationSignature):
-        super(TFLiteModel, self).__init__(signature=signature)
+        super(TFLiteImageModel, self).__init__(signature=signature)
 
     def gradcam_plusplus(self, image, label=None):
-        super(TFLiteModel, self).gradcam_plusplus(image=image, label=label)
+        super(TFLiteImageModel, self).gradcam_plusplus(image=image, label=label)
