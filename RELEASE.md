@@ -1,3 +1,11 @@
+# Release 0.6.2
+___
+## Bug Fixes and Other Improvements
+* Add support for Python 3.10, drop support for Python 3.6.
+* Bump requirements to latest versions.
+* Update Raspberry Pi and setup install to latest tensorflow-lite guidance.
+
+
 # Release 0.6.1
 ___
 ## Bug Fixes and Other Improvements

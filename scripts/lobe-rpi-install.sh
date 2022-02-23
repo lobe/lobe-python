@@ -13,7 +13,5 @@ sudo apt install -y \
     libjpeg62-turbo
 sudo apt-get install -y git
 sudo pip3 install setuptools
-# Install TensorFlow Lite Runtime
-sudo apt install -y python3-tflite-runtime
-# Install lobe-python which can use the tflite backend
-sudo pip3 install lobe
+# Install lobe-python to use the tflite backend
+sudo pip3 install lobe[tflite]
